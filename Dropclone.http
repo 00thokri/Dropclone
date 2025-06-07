@@ -1,6 +1,0 @@
-@Dropclone_HostAddress = http://localhost:5204
-
-GET {{Dropclone_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

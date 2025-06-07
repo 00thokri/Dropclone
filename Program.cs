@@ -1,4 +1,4 @@
-
+using Microsoft.EntityFrameworkCore;
 namespace Dropclone;
 
 public class Program
@@ -7,16 +7,18 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddAuthorization();
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(connectionString)
+        );
+        builder.Services.AddControllers();
+        builder.Services.AddScoped<IFolderService, FolderService>();
+        builder.Services.AddScoped<IFolderRepository, EFFolderRepository>();
+        
+       
+         var app = builder.Build();
 
-        var app = builder.Build();
-
-        app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-
+        app.MapControllers();
         app.Run();
     }
 }

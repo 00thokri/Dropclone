@@ -1,0 +1,11 @@
+meta {
+  name: Get All Folders
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:5204/getFolders
+  body: json
+  auth: inherit
+}
