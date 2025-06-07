@@ -30,12 +30,12 @@ public class FolderService: IFolderService
            
         }
 
-        if(await folderRepository.FindFolderByName(name) != null)
+        if(await folderRepository.FindFolderByNameAsync(name) != null)
         {
             throw new ArgumentException($"Folder with name '{name}' already exists.");
         }
 
-            var folderEntity = await folderRepository.CreateAsync(name);
+            var folderEntity = await folderRepository.CreateFolderAsync(name);
             return folderEntity;
         
         
@@ -43,7 +43,7 @@ public class FolderService: IFolderService
     
     public async Task<ICollection<FolderEntity>> GetAllFoldersAsync()
     {
-        var folders = await folderRepository.GetAllFolders();
+        var folders = await folderRepository.GetAllFoldersAsync();
         return folders;
     }
 

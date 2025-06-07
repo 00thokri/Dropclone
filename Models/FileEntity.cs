@@ -1,7 +1,7 @@
 public class FileEntity
 {
     public Guid Id { get; set; }
-    public FolderEntity Folder { get; set; }
+    public Guid FolderId { get; set; }
     public string Name { get; set; }
     public string Content { get; set; }
 
@@ -11,10 +11,10 @@ public class FileEntity
 
 
 
-    public FileEntity(FolderEntity folder, string name, string content)
+    public FileEntity(Guid folderId, string name, string content)
     {
         this.Id = Guid.NewGuid();
-        this.Folder = folder;
+        this.FolderId = folderId;
         this.Name = name;
         this.Content = content;
     }
@@ -23,6 +23,5 @@ public class FileEntity
     {
         this.Name = string.Empty;
         this.Content = string.Empty;
-        this.Folder = null!;
     }
 }

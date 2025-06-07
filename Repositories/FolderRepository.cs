@@ -47,11 +47,5 @@ public class EFFolderRepository : IFolderRepository
         return true;
     }
 
-    public async Task<FolderEntity?> FindFolderByNameId(Guid folderId)
-    {
-        var folder = await context.Folders.FindAsync(folderId);
-        if (folder == null) return null;
 
-        return folder;
-    }
 }

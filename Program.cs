@@ -14,6 +14,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddScoped<IFolderService, FolderService>();
         builder.Services.AddScoped<IFolderRepository, EFFolderRepository>();
+        builder.Services.AddScoped<IFileService, FileService>();
+        builder.Services.AddScoped<IFileRepository, EFFileRepistory>();
         
        
          var app = builder.Build();
