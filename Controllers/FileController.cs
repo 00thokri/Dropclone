@@ -40,7 +40,7 @@ public class FileController : ControllerBase
     [HttpDelete("deleteFile/{filename}")]
     public async Task<IActionResult> DeleteFile(string filename)
     {
-         try
+        try
         {
             var result = await fileService.DeleteFileAsync(filename);
             if (result)
@@ -52,9 +52,24 @@ public class FileController : ControllerBase
                 return NotFound("Folder not found.");
             }
         }
-         catch (Exception exception)
+        catch (Exception exception)
         {
-            return StatusCode(500,  exception.Message);
+            return StatusCode(500, exception.Message);
         }
+    }
+
+    [HttpGet("download/{filename}")]
+    public async Task<IActionResult> DownloadFile(string filename)
+    {
+       try
+        {
+            var newFile = await fileService.DownloadFileAsync(filename);
+            return Ok("File created succesfully");
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(exception.Message);
+        }
+        
     }
 }
