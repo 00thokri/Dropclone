@@ -45,11 +45,11 @@ public class FileController : ControllerBase
             var result = await fileService.DeleteFileAsync(filename);
             if (result)
             {
-                return Ok("Folder deleted successfully.");
+                return Ok("File deleted successfully.");
             }
             else
             {
-                return NotFound("Folder not found.");
+                return NotFound("File not found.");
             }
         }
         catch (Exception exception)
