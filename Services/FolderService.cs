@@ -57,7 +57,7 @@ public class FolderService: IFolderService
     }
 
 /// <summary>
-/// Deletes a folder and all files in it specified by folderId
+/// Deletes a folder and all files in it specified by the name of the folder
 /// </summary>
 /// <param name="folderId">The ID of the folder to be deleted</param>
 /// <returns>Returns the result of the deletion as a boolean </returns>
