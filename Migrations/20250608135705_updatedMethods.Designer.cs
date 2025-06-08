@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Dropclone.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250608135705_updatedMethods")]
+    partial class updatedMethods
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +37,9 @@ namespace Dropclone.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("FolderEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("FolderId")
                         .HasColumnType("uuid");
 
@@ -43,7 +49,7 @@ namespace Dropclone.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FolderId");
+                    b.HasIndex("FolderEntityId");
 
                     b.ToTable("Files");
                 });
@@ -67,9 +73,7 @@ namespace Dropclone.Migrations
                 {
                     b.HasOne("FolderEntity", null)
                         .WithMany("Files")
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FolderEntityId");
                 });
 
             modelBuilder.Entity("FolderEntity", b =>

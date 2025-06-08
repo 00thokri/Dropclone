@@ -38,12 +38,12 @@ public class FolderController : ControllerBase
         }
     }
 
-    [HttpDelete("delete/{folderId}")]
-    public async Task<IActionResult> DeleteFolderAsync(Guid folderId)
+    [HttpDelete("delete/{folderName}")]
+    public async Task<IActionResult> DeleteFolderAsync(string folderName)
     {
         try
         {
-            var result = await folderService.DeleteFolderAsync(folderId);
+            var result = await folderService.DeleteFolderAsync(folderName);
             if (result)
             {
                 return Ok("Folder deleted successfully.");

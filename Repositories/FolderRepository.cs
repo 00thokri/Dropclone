@@ -4,7 +4,7 @@ public interface IFolderRepository
     Task<FolderEntity> CreateFolderAsync(string name);
 
     Task<ICollection<FolderEntity>> GetAllFoldersAsync();
-    Task<bool> DeleteAsync(Guid folderId);
+    Task<bool> DeleteFolderAsync(string folderName);
     Task<FolderEntity?> FindFolderByNameAsync(string name);
 
 }
@@ -37,14 +37,29 @@ public class EFFolderRepository : IFolderRepository
     }
     
 
-    public async Task<bool> DeleteAsync(Guid folderId)
+    public async Task<bool> DeleteFolderAsync(string folderName)
     {
-        var folder = await context.Folders.FindAsync(folderId);
-        if (folder == null) return false;
+        using var transaction = await context.Database.BeginTransactionAsync();
+        var folder = await context.Folders
+            .Include(f => f.Files)
+            .FirstOrDefaultAsync(f => f.Name == folderName);
 
-        context.Folders.Remove(folder);
-        await context.SaveChangesAsync();
-        return true;
+        if (folder == null) return false;
+        try
+        {
+            context.Files.RemoveRange(folder.Files);
+            context.Folders.Remove(folder);
+
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return false;
+        }
+     
     }
 
 

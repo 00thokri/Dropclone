@@ -22,7 +22,7 @@ public class FileService : IFileService
     /// <summary>
     /// Asynchronously uploads a file to the specified folder.
     /// </summary>
-    /// <param name="fileRequest">The file request containing the file name and content.</param>
+    /// <param name="fileRequest">The file request containing the file name and file content.</param>
     /// <param name="folderName">The name of the folder to upload the file to.</param>
     /// <returns>
     /// A task that represents the asynchronous operation. The task result contains the created <see cref="FileEntity"/>.
@@ -51,7 +51,7 @@ public class FileService : IFileService
         return await fileRepository.CreateFileAsync(file);
     }
 /// <summary>
-/// Asynchronously deletes a file 
+/// Asynchronously deletes a file from the DB
 /// </summary>
 /// <param name="fileName">The name of the file to be deleted</param>
 /// <returns> Returns the result of the deletion as a boolean</returns>
@@ -72,7 +72,7 @@ public class FileService : IFileService
     /// </summary>
     /// <param name="folderName">the name of the folder to search</param>
     /// <returns>Returns a list of all files found</returns>
-    /// <exception cref="Exception"></exception>
+    /// <exception cref="Exception">Thrown if the folder is not found</exception>
     public async Task<ICollection<FileEntity>> GetFilesInFolderAsync(string folderName)
     {
         var folder = await folderRepository.FindFolderByNameAsync(folderName);
@@ -87,12 +87,12 @@ public class FileService : IFileService
 
 
 /// <summary>
-/// 
+/// Downloads a file into the DownloadedFiles folder in the project directory
 /// </summary>
-/// <param name="fileName"></param>
-/// <returns>The file that was downloaded</returns>
-/// <exception cref="Exception"></exception>
-/// <exception cref="ArgumentException"></exception>
+/// <param name="fileName">The name of the file to be downloaded</param>
+/// <returns>Returns the <see cref="FileEntity"/> that was downloaded </returns>
+/// <exception cref="Exception">Throws exception for if file not found or error saving file</exception>
+/// <exception cref="ArgumentException">Thrown if file name is invalid</exception>
     public async Task<FileEntity> DownloadFileAsync(string fileName)
     {
         var file = await fileRepository.FindFileByName(fileName);
