@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 
 public class FileController : ControllerBase
@@ -64,7 +65,9 @@ public class FileController : ControllerBase
        try
         {
             var newFile = await fileService.DownloadFileAsync(filename);
-            return Ok("File created succesfully");
+            var content = Encoding.UTF8.GetBytes(newFile.Content);
+            var contentType = "text/plain";
+            return File(content, contentType, newFile.Name);
         }
         catch (ArgumentException exception)
         {

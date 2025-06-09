@@ -87,12 +87,11 @@ public class FileService : IFileService
 
 
 /// <summary>
-/// Downloads a file into the DownloadedFiles folder in the project directory
+/// Searches for the specified file and returns it
 /// </summary>
 /// <param name="fileName">The name of the file to be downloaded</param>
-/// <returns>Returns the <see cref="FileEntity"/> that was downloaded </returns>
-/// <exception cref="Exception">Throws exception for if file not found or error saving file</exception>
-/// <exception cref="ArgumentException">Thrown if file name is invalid</exception>
+/// <returns>Returns the <see cref="FileEntity"/> that was found </returns>
+/// <exception cref="Exception">Throws exception for if file not found</exception>
     public async Task<FileEntity> DownloadFileAsync(string fileName)
     {
         var file = await fileRepository.FindFileByName(fileName);
@@ -100,36 +99,6 @@ public class FileService : IFileService
         {
             throw new Exception("File not found");
         }
-        
-        char[] invalidChars = Path.GetInvalidFileNameChars();
-        if (fileName.Any(c => invalidChars.Contains(c)))
-        {
-            throw new ArgumentException("File name contains invalid characters.");
-        }
-
-        byte[] byteArray = Encoding.UTF8.GetBytes(file.Content);
-        //in my case downloads to: D:\Projects\Backend\IndivProjekt\Dropclone\DownloadedFiles\
-        var projectRoot = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
-        var downloadDirectory = Path.Combine(projectRoot, "DownloadedFiles");
-
-        if (!Directory.Exists(downloadDirectory))
-        {
-            Directory.CreateDirectory(downloadDirectory);
-        }
-        
-        var filePath = Path.Combine(downloadDirectory, file.Name);
-
-        try
-        {
-            await File.WriteAllBytesAsync(filePath, byteArray);
-            Console.WriteLine("Saving file to: " + filePath);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error saving file: {ex.Message}");
-        }
-        
-
         return file;
     }
 }
